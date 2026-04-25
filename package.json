@@ -2,6 +2,11 @@
   "name": "miya8060.dev",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.5.2"
+  },
+  "packageManager": "pnpm@10.5.2",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
