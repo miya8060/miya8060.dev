@@ -14,6 +14,9 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 | コンテンツ           | MDX (`@next/mdx` + `gray-matter`)        | リポジトリ内 `content/` で管理                                   |
 | Lint                 | ESLint v10 Flat Config                   | `next lint` は Next.js 16 で削除されたため `eslint .` を直接実行 |
 | Format               | Prettier + `prettier-plugin-tailwindcss` | クラス順を Tailwind 規則に揃える                                 |
+| テスト               | Playwright (E2E のみ)                    | 単体テストは導入せず E2E に一本化                                |
+| 開発手法             | 実用的 TDD                               | ロジック層と主要ルートは test-first、自明な UI/型はスキップ      |
+| MCP                  | `@playwright/mcp` をプロジェクト同梱     | `.mcp.json` で commit、Claude がブラウザ駆動できる               |
 | パッケージマネージャ | pnpm 10.5.2                              |                                                                  |
 | ホスティング         | Vercel                                   | 連携は Phase 2                                                   |
 | ドメイン             | `miya8060.dev`                           | 取得は本リポジトリ作成と並走、Vercel 接続時に確定                |
@@ -25,6 +28,15 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 - **Headless CMS（microCMS 等）**: 記事数が少ない想定なので MDX で十分。執筆頻度が増えたら切替検討。
 - **shadcn/ui や UI ライブラリ**: 最初は必要最小限の手書きコンポーネントで進め、共通化したくなったタイミングで導入判断。
 - **Biome**: ESLint Flat Config + Prettier で必要十分。Biome は将来検討。
+- **Vitest / Jest（単体テスト）**: Playwright E2E に一本化する方針。コンポーネント単位のテストは E2E でカバーできない複雑なロジックが出てきた段階で再検討。
+
+## テスト方針（実用的 TDD）
+
+- **対象**: ルーティング・主要ユーザーフロー・MDX ローダー / frontmatter パース・お問い合わせ送信などロジックを伴う層
+- **やらない**: 自明なマークアップ、型で守れる箇所、単発のスタイル微調整
+- **進め方**: 失敗する E2E テストを先に書く → 実装で green にする → リファクタ（red → green → refactor）
+- **実行**: ローカルは `pnpm test:e2e`（webServer が `pnpm dev` を起動）。CI は本番ビルド (`build` → `start`) に対して実行
+- **MCP**: `@playwright/mcp` を `.mcp.json` で同梱。Claude がブラウザを直接操作してテスト追補・確認に使える
 
 ## フェーズ
 
@@ -35,6 +47,7 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 - Prettier 導入
 - README 整備
 - GitHub Public リポジトリ作成 & 初回 push
+- Playwright + 実用的 TDD のテスト基盤導入（`@playwright/mcp` 含む）
 
 ### Phase 2: デプロイ基盤
 
@@ -67,6 +80,8 @@ pnpm start        # 本番サーバ
 pnpm lint         # ESLint
 pnpm format       # Prettier 書き換え
 pnpm format:check # Prettier チェックのみ
+pnpm test:e2e     # Playwright E2E テスト
+pnpm test:e2e:ui  # Playwright UI モード
 ```
 
 ## ディレクトリ構成（Phase 1 完了時点の想定）
@@ -84,11 +99,14 @@ miya8060.dev/
 ├── content/
 │   ├── blog/.gitkeep
 │   └── works/.gitkeep
+├── e2e/                 # Playwright E2E テスト
 ├── public/
+├── .mcp.json            # Playwright MCP server 設定
 ├── next.config.ts
 ├── tsconfig.json
 ├── eslint.config.mjs
 ├── prettier.config.mjs
+├── playwright.config.ts
 ├── postcss.config.mjs
 ├── package.json
 ├── pnpm-lock.yaml
