@@ -8,7 +8,7 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 
 | 項目                 | 採用                                     | 補足                                                             |
 | -------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
-| フレームワーク       | Next.js 16 (App Router, Turbopack 既定)  | Node 20.9+ / TS 5.1+                                             |
+| フレームワーク       | Next.js 16 (App Router, Turbopack 既定)  | Node 22.0+ / TS 5.1+                                             |
 | 言語                 | TypeScript (strict)                      | create-next-app 既定                                             |
 | スタイリング         | Tailwind CSS v4                          | create-next-app 既定で導入                                       |
 | コンテンツ           | MDX (`@next/mdx` + `gray-matter`)        | リポジトリ内 `content/` で管理                                   |
