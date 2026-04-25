@@ -1,0 +1,67 @@
+name: e2e-preview
+
+on:
+  repository_dispatch:
+    types: [vercel.deployment.success]
+  workflow_dispatch:
+    inputs:
+      preview_url:
+        description: "Vercel Preview URL (https:// 含む)"
+        required: true
+        type: string
+      git_sha:
+        description: "テスト対象 commit SHA (省略時は default branch HEAD)"
+        required: false
+        type: string
+
+concurrency:
+  group: e2e-${{ github.event.client_payload.url || github.event.inputs.preview_url || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    if: github.event_name == 'workflow_dispatch' || github.event.client_payload.environment == 'preview'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.client_payload.git.sha || github.event.inputs.git_sha || github.sha }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.5.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright against Vercel Preview
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.client_payload.url || github.event.inputs.preview_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: pnpm test:e2e
+
+      - name: Upload Playwright artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: ignore
