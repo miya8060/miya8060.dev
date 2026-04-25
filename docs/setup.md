@@ -6,21 +6,23 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 
 ## スタック（2026-04-26 確定）
 
-| 項目                 | 採用                                     | 補足                                                             |
-| -------------------- | ---------------------------------------- | ---------------------------------------------------------------- |
-| フレームワーク       | Next.js 16 (App Router, Turbopack 既定)  | Node 22.0+ / TS 5.1+                                             |
-| 言語                 | TypeScript (strict)                      | create-next-app 既定                                             |
-| スタイリング         | Tailwind CSS v4                          | create-next-app 既定で導入                                       |
-| コンテンツ           | MDX (`@next/mdx` + `gray-matter`)        | リポジトリ内 `content/` で管理                                   |
-| Lint                 | ESLint v10 Flat Config                   | `next lint` は Next.js 16 で削除されたため `eslint .` を直接実行 |
-| Format               | Prettier + `prettier-plugin-tailwindcss` | クラス順を Tailwind 規則に揃える                                 |
-| テスト               | Playwright (E2E のみ)                    | 単体テストは導入せず E2E に一本化                                |
-| 開発手法             | 実用的 TDD                               | ロジック層と主要ルートは test-first、自明な UI/型はスキップ      |
-| MCP                  | `@playwright/mcp` をプロジェクト同梱     | `.mcp.json` で commit、Claude がブラウザ駆動できる               |
-| パッケージマネージャ | pnpm 10.5.2                              |                                                                  |
-| ホスティング         | Vercel                                   | 連携は Phase 2                                                   |
-| ドメイン             | `miya8060.dev`                           | 取得は本リポジトリ作成と並走、Vercel 接続時に確定                |
-| GitHub 公開設定      | Public                                   | 雛形段階から公開で OK                                            |
+| 項目                 | 採用                                     | 補足                                                                         |
+| -------------------- | ---------------------------------------- | ---------------------------------------------------------------------------- |
+| フレームワーク       | Next.js 16 (App Router, Turbopack 既定)  | Node 22.0+ / TS 5.1+                                                         |
+| 言語                 | TypeScript (strict)                      | create-next-app 既定                                                         |
+| スタイリング         | Tailwind CSS v4                          | create-next-app 既定で導入                                                   |
+| コンテンツ           | MDX (`@next/mdx` + `gray-matter`)        | リポジトリ内 `content/` で管理                                               |
+| Lint                 | ESLint v10 Flat Config                   | `next lint` は Next.js 16 で削除されたため `eslint .` を直接実行             |
+| Format               | Prettier + `prettier-plugin-tailwindcss` | クラス順を Tailwind 規則に揃える                                             |
+| テスト               | Playwright (E2E のみ)                    | 単体テストは導入せず E2E に一本化                                            |
+| 開発手法             | 実用的 TDD                               | ロジック層と主要ルートは test-first、自明な UI/型はスキップ                  |
+| MCP                  | `@playwright/mcp` をプロジェクト同梱     | `.mcp.json` で commit、Claude がブラウザ駆動できる                           |
+| パッケージマネージャ | pnpm 10.5.2                              | `package.json#engines` で固定                                                |
+| ホスティング         | Vercel                                   | main = Production / PR = Preview / Preview に Deployment Protection          |
+| Analytics            | Vercel Analytics + Speed Insights        | App Router 用 (`@vercel/analytics/next` 等)                                  |
+| CI                   | GitHub Actions                           | `ci.yml` (lint/format/tsc) + `e2e-preview.yml` (Vercel Preview に対する E2E) |
+| ドメイン             | `miya8060.dev`                           | Vercel Domains で取得 → Vercel に attach                                     |
+| GitHub 公開設定      | Public                                   | 雛形段階から公開で OK                                                        |
 
 ## 採用見送り（背景）
 
@@ -35,12 +37,15 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 - **対象**: ルーティング・主要ユーザーフロー・MDX ローダー / frontmatter パース・お問い合わせ送信などロジックを伴う層
 - **やらない**: 自明なマークアップ、型で守れる箇所、単発のスタイル微調整
 - **進め方**: 失敗する E2E テストを先に書く → 実装で green にする → リファクタ（red → green → refactor）
-- **実行**: ローカルは `pnpm test:e2e`（webServer が `pnpm dev` を起動）。CI は本番ビルド (`build` → `start`) に対して実行
+- **実行**:
+  - ローカル: `pnpm test:e2e`（`webServer` が `pnpm dev` を起動）
+  - CI: Vercel Preview デプロイ完了をトリガーに `repository_dispatch (vercel.deployment.success)` で発火し、Preview URL に対して Playwright を実行
+  - 手元から Preview を直接叩く: `PLAYWRIGHT_BASE_URL=https://<preview>.vercel.app VERCEL_AUTOMATION_BYPASS_SECRET=... pnpm test:e2e`
 - **MCP**: `@playwright/mcp` を `.mcp.json` で同梱。Claude がブラウザを直接操作してテスト追補・確認に使える
 
 ## フェーズ
 
-### Phase 1: ブートストラップ ← 現在
+### Phase 1: ブートストラップ（完了）
 
 - `pnpm create next-app@latest .` で雛形生成（`--no-git` で既存 `.git` を温存）
 - MDX セットアップ（ビルドが通る最小構成）
@@ -49,11 +54,22 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 - GitHub Public リポジトリ作成 & 初回 push
 - Playwright + 実用的 TDD のテスト基盤導入（`@playwright/mcp` 含む）
 
-### Phase 2: デプロイ基盤
+### Phase 2: デプロイ基盤 ← 現在
 
-- Vercel プロジェクト作成・GitHub 連携
-- 自動デプロイ確認
-- `miya8060.dev` ドメイン取得 → Vercel に接続
+コード側（PR ベース）:
+
+- `package.json#engines` で Node 22 / pnpm 10.5.2 を固定
+- Vercel Analytics + Speed Insights を `src/app/layout.tsx` に挿入
+- `playwright.config.ts` を `PLAYWRIGHT_BASE_URL` / `VERCEL_AUTOMATION_BYPASS_SECRET` 対応に
+- `.github/workflows/ci.yml`: PR / main push で lint / format:check / tsc
+- `.github/workflows/e2e-preview.yml`: Vercel Preview に対する Playwright E2E（`repository_dispatch` 発火）
+
+ダッシュボード側（手動。詳細は下記「Vercel Dashboard セットアップ」）:
+
+- Vercel プロジェクト作成・GitHub 連携・Production = main
+- Deployment Protection を Preview にかけ、Automation Bypass secret を発行
+- Vercel Analytics / Speed Insights を有効化
+- `miya8060.dev` を Vercel Domains で取得し attach
 
 ### Phase 3: ページ実装
 
@@ -70,6 +86,55 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 
 - メール送信サービス選定（Resend など）
 - スパム対策（hCaptcha / honeypot 等）
+
+## Vercel Dashboard セットアップ（Phase 2）
+
+ユーザーが手動で行う Vercel ダッシュボード作業のチェックリスト。コード変更 PR とは独立に進める。
+
+1. **Project Import**: <https://vercel.com/new> から `miya8060/miya8060.dev` を Import
+2. **Framework**: Next.js（自動検出）。Build / Install コマンドはデフォルト（pnpm 検出）
+3. **Settings → General**: Node.js Version = `22.x`
+4. **Settings → Git**:
+   - Production Branch = `main`
+   - Vercel Bot PR Comments = ON
+5. **Settings → Deployment Protection**:
+   - Vercel Authentication = **Standard Protection**（Preview のみ ON、Production は OFF）
+   - **Protection Bypass for Automation** で secret を生成 → コピー
+6. **Settings → Analytics** = Enable
+7. **Settings → Speed Insights** = Enable
+8. **GitHub repo → Settings → Secrets and variables → Actions**:
+   - `VERCEL_AUTOMATION_BYPASS_SECRET` = 5 でコピーした値
+9. **動作確認**: main への空コミット push（または Vercel Dashboard から Redeploy）→ Production が緑になることを確認
+10. **ドメイン (Step C)**: Vercel Dashboard → Domains で `miya8060.dev` を購入し、プロジェクトに Add。`www.miya8060.dev` も Add してリダイレクトを設定
+
+## CI ワークフロー
+
+`.github/workflows/ci.yml` (lint):
+
+- トリガー: `pull_request` (opened/synchronize/reopened) / `push` to `main`
+- 実行内容: `pnpm lint` / `pnpm format:check` / `pnpm exec tsc --noEmit`
+- 並行実行抑止: 同一ブランチで前の run を cancel
+
+`.github/workflows/e2e-preview.yml` (E2E against Vercel Preview):
+
+- トリガー:
+  - `repository_dispatch` の `vercel.deployment.success`（Vercel for GitHub が Preview デプロイ成功時に dispatch）
+  - `workflow_dispatch`（Preview URL を手動指定して実行できる fallback）
+- フィルタ: `client_payload.environment == 'preview'` で Production を除外
+- チェックアウト先: `client_payload.git.sha`（Vercel が build した commit に固定）
+- 実行内容: Playwright browser キャッシュ → `playwright install` → `pnpm test:e2e` を `PLAYWRIGHT_BASE_URL` と `VERCEL_AUTOMATION_BYPASS_SECRET` 付きで実行
+- 失敗時: `playwright-report/` と `test-results/` を artifact アップロード
+
+> `repository_dispatch` は default branch にワークフロー YAML が存在する時のみ発火する。本ワークフロー初回は merge 後に有効化されるため、最初の数 PR では `workflow_dispatch` で手動実行することがある。
+
+## Secret / 環境変数
+
+| 名前                              | 場所                   | 用途                                                                                                                                          |
+| :-------------------------------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | GitHub Actions Secrets | E2E が Deployment Protection をかけた Preview を叩くための bypass。`x-vercel-protection-bypass` / `x-vercel-set-bypass-cookie` ヘッダーに使用 |
+| `PLAYWRIGHT_BASE_URL`             | CI 内で動的に注入      | E2E の baseURL 上書き。Vercel Preview URL を入れる                                                                                            |
+
+ローカル開発では両方 unset で OK（`webServer` が `pnpm dev` を起動）。
 
 ## 開発コマンド（Phase 1 完了後に有効）
 
@@ -101,6 +166,8 @@ miya8060.dev/
 │   └── works/.gitkeep
 ├── e2e/                 # Playwright E2E テスト
 ├── public/
+├── .github/
+│   └── workflows/       # CI (lint) + E2E against Vercel Preview
 ├── .mcp.json            # Playwright MCP server 設定
 ├── next.config.ts
 ├── tsconfig.json
