@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# miya8060.dev
 
-## Getting Started
+[miya8060](https://github.com/miya8060) のフリーランスデビュー用ポートフォリオサイト。Next.js 16 + Tailwind CSS v4 + MDX で構築、Vercel にデプロイ予定。
 
-First, run the development server:
+スタック確定事項とフェーズ計画は [`docs/setup.md`](./docs/setup.md) を参照。
+
+## 必要環境
+
+- Node.js 20.9+
+- pnpm 10.5+
+
+## 開発コマンド
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install      # 依存インストール
+pnpm dev          # 開発サーバ (http://localhost:3000)
+pnpm build        # 本番ビルド
+pnpm start        # 本番サーバ
+pnpm lint         # ESLint
+pnpm format       # Prettier 書き換え
+pnpm format:check # Prettier チェックのみ
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ディレクトリ構成
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+miya8060.dev/
+├── docs/                  # スタック・運用メモ
+├── src/
+│   ├── app/               # App Router（layout / page / globals.css）
+│   └── mdx-components.tsx # MDX グローバルコンポーネント
+├── content/
+│   ├── blog/              # ブログ記事 (MDX)
+│   └── works/             # 実績 (MDX)
+├── public/                # 静的アセット
+├── next.config.ts
+├── tsconfig.json
+├── eslint.config.mjs
+├── prettier.config.mjs
+└── postcss.config.mjs
+```
