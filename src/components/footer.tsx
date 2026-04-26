@@ -32,7 +32,7 @@ export function Footer() {
             miya<span className="text-accent">8060</span>
           </p>
           <p className="mt-3 max-w-[280px] text-[12px] leading-[1.55] opacity-60">
-            Independent software engineer in Tokyo.
+            Independent software engineer.
             TypeScript、Go、とインフラでフルスタックに作る人。
           </p>
         </div>
