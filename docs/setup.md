@@ -21,7 +21,7 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 | ホスティング         | Vercel                                   | main = Production / PR = Preview / Preview に Deployment Protection          |
 | Analytics            | Vercel Analytics + Speed Insights        | App Router 用 (`@vercel/analytics/next` 等)                                  |
 | CI                   | GitHub Actions                           | `ci.yml` (lint/format/tsc) + `e2e-preview.yml` (Vercel Preview に対する E2E) |
-| ドメイン             | `miya8060.dev`                           | Vercel Domains で取得 → Vercel に attach                                     |
+| ドメイン             | `miya8060.dev`                           | Porkbun で取得 → NS を Vercel に委任、`www` は apex に 308 リダイレクト      |
 | GitHub 公開設定      | Public                                   | 雛形段階から公開で OK                                                        |
 
 ## 採用見送り（背景）
@@ -54,7 +54,7 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 - GitHub Public リポジトリ作成 & 初回 push
 - Playwright + 実用的 TDD のテスト基盤導入（`@playwright/mcp` 含む）
 
-### Phase 2: デプロイ基盤 ← 現在
+### Phase 2: デプロイ基盤（完了 / 2026-04-26）
 
 コード側（PR ベース）:
 
@@ -69,7 +69,8 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 - Vercel プロジェクト作成・GitHub 連携・Production = main
 - Deployment Protection を Preview にかけ、Automation Bypass secret を発行
 - Vercel Analytics / Speed Insights を有効化
-- `miya8060.dev` を Vercel Domains で取得し attach
+- `miya8060.dev` を Porkbun で取得 → NS を Vercel に委任 (`ns1/ns2.vercel-dns.com`)
+- `miya8060.dev` (apex) を Production、`www.miya8060.dev` を apex への 308 リダイレクトに設定
 
 ### Phase 3: ページ実装
 
@@ -105,7 +106,7 @@ miya8060 のフリーランスデビュー用ポートフォリオサイト。Ne
 8. **GitHub repo → Settings → Secrets and variables → Actions**:
    - `VERCEL_AUTOMATION_BYPASS_SECRET` = 5 でコピーした値
 9. **動作確認**: main への空コミット push（または Vercel Dashboard から Redeploy）→ Production が緑になることを確認
-10. **ドメイン (Step C)**: Vercel Dashboard → Domains で `miya8060.dev` を購入し、プロジェクトに Add。`www.miya8060.dev` も Add してリダイレクトを設定
+10. **ドメイン (Step C)**: Porkbun で `miya8060.dev` を取得 → ICANN 検証メールを承認。Vercel Dashboard → Domains で `miya8060.dev` と `www.miya8060.dev` を Add し、表示された NS (`ns1.vercel-dns.com` / `ns2.vercel-dns.com`) を Porkbun の Authoritative Nameservers に設定。NS 伝播後、`miya8060.dev` を Production（apex 直サーブ）、`www.miya8060.dev` を `miya8060.dev` への 308 リダイレクトに設定。SSL は Vercel が自動発行
 
 ## CI ワークフロー
 
