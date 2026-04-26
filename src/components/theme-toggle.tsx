@@ -3,15 +3,6 @@
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
 
-const ORDER = ["system", "light", "dark"] as const;
-type Theme = (typeof ORDER)[number];
-
-const LABEL: Record<Theme, string> = {
-  system: "システム",
-  light: "ライト",
-  dark: "ダーク",
-};
-
 const noopSubscribe = () => () => {};
 const useMounted = () =>
   useSyncExternalStore(
@@ -21,21 +12,28 @@ const useMounted = () =>
   );
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
 
-  const current = (theme as Theme | undefined) ?? "system";
-  const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
+  const isLight = mounted ? resolvedTheme === "light" : false;
 
   return (
     <button
       type="button"
-      onClick={() => setTheme(next)}
-      aria-label={`テーマを切り替える (現在: ${LABEL[current]})`}
-      className="border-border text-foreground hover:bg-muted inline-flex h-9 items-center rounded-md border px-3 text-sm transition-colors"
+      onClick={() => setTheme(isLight ? "dark" : "light")}
+      aria-label="theme"
+      aria-pressed={isLight}
+      className="text-foreground relative inline-flex h-[26px] w-[54px] shrink-0 items-center rounded-full border border-current bg-transparent p-0"
       suppressHydrationWarning
     >
-      {mounted ? LABEL[current] : LABEL.system}
+      <span
+        aria-hidden="true"
+        className="absolute top-[2px] left-[2px] block h-5 w-5 rounded-full bg-current"
+        style={{
+          transform: isLight ? "translateX(28px)" : "translateX(0)",
+          transition: "transform 350ms cubic-bezier(0.6, 0.1, 0.3, 1.2)",
+        }}
+      />
     </button>
   );
 }
