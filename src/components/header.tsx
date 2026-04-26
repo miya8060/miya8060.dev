@@ -34,7 +34,7 @@ export function Header() {
           />
         </span>
         <span className="mt-1 hidden font-mono text-[9px] tracking-[0.2em] opacity-45 sm:block">
-          SOFTWARE ENGINEER · TOKYO
+          SOFTWARE ENGINEER
         </span>
       </Link>
       <nav
