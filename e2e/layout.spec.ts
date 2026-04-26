@@ -77,6 +77,22 @@ test.describe("layout", () => {
     await expect(footer.getByText(/\d{2}:\d{2}\s+JST/)).toBeVisible();
   });
 
+  test("renders header and footer on 404 page (unmatched route)", async ({
+    page,
+  }) => {
+    const response = await page.goto("/this-route-does-not-exist");
+    expect(response?.status()).toBe(404);
+
+    await expect(page.getByRole("banner")).toBeVisible();
+    await expect(page.getByRole("contentinfo")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Page not found" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /back to home/i }),
+    ).toHaveAttribute("href", "/");
+  });
+
   test("theme toggle switches between light and dark", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/");
