@@ -45,3 +45,8 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.playwright-mcp/
+
+# local screenshots (MCP, ad-hoc)
+/*.png
+!public/**/*.png
