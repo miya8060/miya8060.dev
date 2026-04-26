@@ -24,6 +24,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Diagnose dispatch payload
+        env:
+          GITHUB_EVENT_JSON: ${{ toJSON(github.event) }}
+        run: |
+          echo "=== github.event_name ==="
+          echo "${{ github.event_name }}"
+          echo ""
+          echo "=== github.event (full JSON) ==="
+          echo "$GITHUB_EVENT_JSON"
+          echo ""
+          echo "=== ref candidates ==="
+          echo "client_payload.git.sha:    '${{ github.event.client_payload.git.sha }}'"
+          echo "client_payload.git.commit: '${{ github.event.client_payload.git.commit }}'"
+          echo "client_payload.commit:     '${{ github.event.client_payload.commit }}'"
+          echo "client_payload.sha:        '${{ github.event.client_payload.sha }}'"
+          echo "inputs.git_sha:            '${{ github.event.inputs.git_sha }}'"
+          echo "github.sha:                '${{ github.sha }}'"
+
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.client_payload.git.sha || github.event.inputs.git_sha || github.sha }}
