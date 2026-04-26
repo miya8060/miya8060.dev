@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Container } from "@/components/container";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const NAV_ITEMS = [
@@ -21,40 +20,51 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="border-border bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
-      <Container className="flex h-14 items-center justify-between gap-4">
-        <Link
-          href="/"
-          className="text-foreground text-base font-semibold tracking-tight"
-        >
-          miya8060.dev
-        </Link>
-        <nav aria-label="メインナビゲーション">
-          <ul className="flex items-center gap-1 sm:gap-2">
-            {NAV_ITEMS.map((item) => {
-              const active = isActive(pathname, item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={active ? "page" : undefined}
-                    className={`hover:text-foreground inline-flex h-9 items-center rounded-md px-2 text-sm transition-colors sm:px-3 ${
-                      active
-                        ? "text-foreground font-medium"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-            <li className="ml-1 sm:ml-2">
-              <ThemeToggle />
-            </li>
-          </ul>
-        </nav>
-      </Container>
+    <header className="sticky top-0 z-40 flex items-center justify-between gap-3 px-5 py-5 sm:px-10 sm:py-6 lg:px-14 lg:py-7">
+      <Link
+        href="/"
+        className="text-foreground inline-flex flex-col items-start"
+        aria-label="miya8060"
+      >
+        <span className="font-display flex items-baseline text-[22px] leading-none font-bold tracking-[-0.04em]">
+          miya<span className="text-accent">8060</span>
+          <span
+            aria-hidden="true"
+            className="bg-accent ml-1 inline-block h-1.5 w-1.5 -translate-y-0.5 rounded-full"
+          />
+        </span>
+        <span className="mt-1 hidden font-mono text-[9px] tracking-[0.2em] opacity-45 sm:block">
+          SOFTWARE ENGINEER · TOKYO
+        </span>
+      </Link>
+      <nav
+        aria-label="メインナビゲーション"
+        className="miya-capsule border-border flex shrink-0 items-center gap-0.5 rounded-full border p-1 shadow-[0_8px_28px_rgba(0,0,0,0.06)] sm:gap-1 sm:p-1.5 dark:shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
+      >
+        <ul className="flex items-center">
+          {NAV_ITEMS.map((item) => {
+            const active = isActive(pathname, item.href);
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`hover:bg-accent/15 relative inline-flex rounded-full px-2.5 py-1.5 text-[13px] font-medium transition-colors sm:px-[18px] sm:py-[9px] ${
+                    active ? "text-foreground" : "text-foreground/70"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <span
+          aria-hidden="true"
+          className="mx-1 h-[18px] w-px bg-current opacity-[0.12] sm:mx-1.5"
+        />
+        <ThemeToggle />
+      </nav>
     </header>
   );
 }
