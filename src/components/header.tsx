@@ -20,7 +20,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between gap-3 px-5 py-5 sm:px-10 sm:py-6 lg:px-14 lg:py-7">
+    <header className="sticky top-0 z-40 flex flex-col items-stretch gap-3 px-5 pt-4 pb-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-10 sm:py-6 lg:px-14 lg:py-7">
       <Link
         href="/"
         className="text-foreground inline-flex flex-col items-start"
@@ -39,7 +39,7 @@ export function Header() {
       </Link>
       <nav
         aria-label="メインナビゲーション"
-        className="miya-capsule border-border flex shrink-0 items-center gap-0.5 rounded-full border p-1 shadow-[0_8px_28px_rgba(0,0,0,0.06)] sm:gap-1 sm:p-1.5 dark:shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
+        className="miya-capsule border-border flex shrink-0 items-center gap-0.5 self-end rounded-full border p-1 shadow-[0_8px_28px_rgba(0,0,0,0.06)] sm:gap-1 sm:self-auto sm:p-1.5 dark:shadow-[0_8px_28px_rgba(0,0,0,0.4)]"
       >
         <ul className="flex items-center">
           {NAV_ITEMS.map((item) => {
