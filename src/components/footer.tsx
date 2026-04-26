@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Mail } from "lucide-react";
 import type { ComponentProps } from "react";
-import { Container } from "@/components/container";
+import { FooterClock } from "@/components/footer-clock";
 
 function GithubIcon(props: ComponentProps<"svg">) {
   return (
@@ -16,54 +15,93 @@ function GithubIcon(props: ComponentProps<"svg">) {
   );
 }
 
-const SOCIAL_LINKS = [
-  {
-    href: "https://github.com/miya8060",
-    label: "GitHub",
-    icon: GithubIcon,
-    external: true,
-  },
-  {
-    href: "/contact",
-    label: "Contact",
-    icon: Mail,
-    external: false,
-  },
+const SITE_LINKS = [
+  { href: "/about", label: "About" },
+  { href: "/works", label: "Works" },
+  { href: "/blog", label: "Blog" },
 ] as const;
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-border text-muted-foreground border-t">
-      <Container className="flex h-16 items-center justify-between gap-4 text-sm">
-        <p>© {year} miya8060</p>
-        <ul className="flex items-center gap-1">
-          {SOCIAL_LINKS.map(({ href, label, icon: Icon, external }) => {
-            const linkClass =
-              "hover:text-foreground inline-flex h-9 w-9 items-center justify-center rounded-md transition-colors";
-            return (
+    <footer className="border-border bg-surface text-foreground border-t px-5 pt-9 pb-6 sm:px-10 lg:px-14">
+      <div className="grid grid-cols-1 gap-10 pb-[22px] sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+        <div>
+          <p className="font-display text-[26px] leading-none font-bold tracking-[-0.04em]">
+            miya<span className="text-accent">8060</span>
+          </p>
+          <p className="mt-3 max-w-[280px] text-[12px] leading-[1.55] opacity-60">
+            Independent software engineer in Tokyo.
+            TypeScript、Go、とインフラでフルスタックに作る人。
+          </p>
+        </div>
+
+        <div>
+          <p className="mb-3 font-mono text-[10px] tracking-[0.18em] opacity-45">
+            SITE
+          </p>
+          <ul className="flex flex-col gap-[7px]">
+            {SITE_LINKS.map(({ href, label }) => (
               <li key={href}>
-                {external ? (
-                  <a
-                    href={href}
-                    aria-label={label}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={linkClass}
-                  >
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                  </a>
-                ) : (
-                  <Link href={href} aria-label={label} className={linkClass}>
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                  </Link>
-                )}
+                <Link href={href} className="miya-link text-[13px]">
+                  {label}
+                </Link>
               </li>
-            );
-          })}
-        </ul>
-      </Container>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <p className="mb-3 font-mono text-[10px] tracking-[0.18em] opacity-45">
+            SOCIAL
+          </p>
+          <ul className="flex flex-col gap-[7px]">
+            <li>
+              <a
+                href="https://github.com/miya8060"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miya-link inline-flex items-center gap-2 text-[13px]"
+              >
+                <GithubIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                GitHub
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="mb-3 font-mono text-[10px] tracking-[0.18em] opacity-45">
+            CONTACT
+          </p>
+          <ul className="flex flex-col gap-[7px]">
+            <li>
+              <a
+                href="mailto:hello@miya8060.dev"
+                className="miya-link text-[13px]"
+              >
+                hello@miya8060.dev
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                aria-disabled="true"
+                tabIndex={-1}
+                className="pointer-events-none cursor-not-allowed text-[13px] opacity-55"
+              >
+                Schedule a chat →
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-border flex items-center justify-between border-t pt-[18px] font-mono text-[10px] tracking-[0.08em] opacity-55">
+        <span>© {year} MIYA8060</span>
+        <FooterClock />
+      </div>
     </footer>
   );
 }
