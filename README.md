@@ -1,10 +1,10 @@
 # miya8060.dev
 
-[![Production](https://img.shields.io/badge/production-miya8060--dev.vercel.app-black?logo=vercel)](https://miya8060-dev.vercel.app/)
+[![Production](https://img.shields.io/badge/production-miya8060.dev-black?logo=vercel)](https://miya8060.dev/)
 
 [miya8060](https://github.com/miya8060) のフリーランスデビュー用ポートフォリオサイト。Next.js 16 + Tailwind CSS v4 + MDX で構築、Vercel にデプロイ。
 
-- **Production**: <https://miya8060-dev.vercel.app/>（独自ドメイン `miya8060.dev` 接続は Phase 2 後半 Step C で実施）
+- **Production**: <https://miya8060.dev/>（`www.miya8060.dev` は apex に 308 リダイレクト）
 
 スタック確定事項とフェーズ計画、Vercel / CI セットアップ手順は [`docs/setup.md`](./docs/setup.md) を参照。
 
@@ -29,7 +29,7 @@ pnpm test:e2e:ui  # Playwright UI モード
 
 ## デプロイ
 
-- **Production**: `main` への push で Vercel が自動デプロイ → <https://miya8060-dev.vercel.app/>
+- **Production**: `main` への push で Vercel が自動デプロイ → <https://miya8060.dev/>
 - **Preview**: PR ごとに Vercel が Preview デプロイを作成（Deployment Protection で限定公開）。Vercel Bot が PR にコメントで URL を案内
 - **CI**:
   - `.github/workflows/ci.yml`: lint / format:check / tsc を PR と main push で実行
