@@ -13,7 +13,7 @@ test.describe("layout", () => {
       header.getByRole("link", { name: "miya8060" }),
     ).toHaveAttribute("href", "/");
 
-    await expect(header.getByText("SOFTWARE ENGINEER · TOKYO")).toBeVisible();
+    await expect(header.getByText("SOFTWARE ENGINEER")).toBeVisible();
 
     const nav = header.getByRole("navigation", {
       name: "メインナビゲーション",
@@ -45,7 +45,7 @@ test.describe("layout", () => {
     await expect(footer).toBeVisible();
 
     await expect(
-      footer.getByText(/Independent software engineer in Tokyo/),
+      footer.getByText(/Independent software engineer\./),
     ).toBeVisible();
 
     await expect(footer.getByText("SITE", { exact: true })).toBeVisible();
