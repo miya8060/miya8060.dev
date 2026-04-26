@@ -38,11 +38,14 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --font-sans:
-    var(--font-geist-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    var(--font-inter), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
     "Noto Sans JP", "Yu Gothic Medium", "Yu Gothic", Meiryo, system-ui,
     sans-serif;
+  --font-display:
+    var(--font-space-grotesk), var(--font-inter), "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
   --font-mono:
-    var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
+    var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, monospace;
 }
 
