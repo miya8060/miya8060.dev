@@ -14,8 +14,7 @@ const useMounted = () =>
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
-
-  const isLight = mounted ? resolvedTheme === "light" : false;
+  const isLight = mounted && resolvedTheme === "light";
 
   return (
     <button
@@ -28,11 +27,7 @@ export function ThemeToggle() {
     >
       <span
         aria-hidden="true"
-        className="absolute top-[2px] left-[2px] block h-5 w-5 rounded-full bg-current"
-        style={{
-          transform: isLight ? "translateX(28px)" : "translateX(0)",
-          transition: "transform 350ms cubic-bezier(0.6, 0.1, 0.3, 1.2)",
-        }}
+        className="theme-toggle-knob absolute top-[2px] left-[2px] block h-5 w-5 rounded-full bg-current"
       />
     </button>
   );
