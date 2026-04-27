@@ -23,7 +23,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "miya8060.dev",
+  title: {
+    template: "%s — miya8060.dev",
+    default: "miya8060.dev",
+  },
   description: "miya8060 のフリーランス向けポートフォリオサイト",
 };
 
