@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact",
   description: "お仕事のご相談・カジュアル面談はこちらから。",
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

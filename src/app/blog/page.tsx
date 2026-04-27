@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Blog",
   description: "技術ノートとフリーランスの記録（準備中）。",
-};
+  path: "/blog",
+});
 
 export default function BlogPage() {
   return (

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description: "miya8060 のプロフィール、スキル、経歴。",
-};
+  path: "/about",
+});
 
 const SECTIONS = [
   { eyebrow: "PROFILE · 準備中", title: "Profile", subtitle: "プロフィール" },

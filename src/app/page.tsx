@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { NOW_ENTRIES, NOW_UPDATED_AT } from "@/content/now";
+import { pageMetadata } from "@/lib/metadata";
+import { SITE_DESCRIPTION } from "@/lib/site";
 import { SELECTED_WORKS } from "@/content/works";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: { absolute: "miya8060.dev — Software Engineer Portfolio" },
-  description:
-    "スタートアップから自治体プロジェクトまで、システム開発を5年。最近はCloudとLLMで遊んでいます。",
-};
+  description: SITE_DESCRIPTION,
+  path: "/",
+});
 
 export default function HomePage() {
   return (
