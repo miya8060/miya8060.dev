@@ -1,7 +1,30 @@
+import fs from "node:fs";
+import path from "node:path";
 import { expect, test } from "@playwright/test";
-import { SELECTED_WORKS } from "../src/content/works";
+import matter from "gray-matter";
 
 const SITE = "https://miya8060.dev";
+
+const WORKS_DIR = path.join(__dirname, "..", "content", "works");
+
+type Work = {
+  slug: string;
+  year: string;
+  name: string;
+  role: string;
+  stack: string;
+  summary: string;
+  featured?: boolean;
+};
+
+const SELECTED_WORKS: readonly Work[] = fs
+  .readdirSync(WORKS_DIR)
+  .filter((file) => file.endsWith(".mdx"))
+  .map((file) => {
+    const raw = fs.readFileSync(path.join(WORKS_DIR, file), "utf8");
+    return matter(raw).data as Work;
+  })
+  .sort((a, b) => b.year.localeCompare(a.year));
 
 async function meta(page: import("@playwright/test").Page, selector: string) {
   return page.locator(selector).getAttribute("content");
@@ -42,6 +65,12 @@ test.describe("works case study slugs", () => {
       await expect(
         main.getByRole("link", { name: /back to works/i }),
       ).toHaveAttribute("href", "/works");
+
+      const caseStudy = main.getByRole("region", { name: "Case study" });
+      await expect(caseStudy).toBeVisible();
+      await expect(
+        caseStudy.getByText("FULL CASE STUDY · 準備中"),
+      ).toBeVisible();
     });
 
     test(`${path} exposes per-slug canonical and OG image`, async ({
@@ -61,7 +90,7 @@ test.describe("works case study slugs", () => {
         `${work.name} — miya8060.dev`,
       );
       expect(await meta(page, 'meta[property="og:description"]')).toBe(
-        work.description,
+        work.summary,
       );
       expect(await meta(page, 'meta[property="og:image"]')).toContain(
         `${path}/opengraph-image`,
