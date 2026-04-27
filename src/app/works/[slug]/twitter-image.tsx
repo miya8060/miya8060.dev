@@ -18,9 +18,10 @@ export default async function Image({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const work = findWorkBySlug(slug);
-  if (!work) notFound();
+  const entry = findWorkBySlug(slug);
+  if (!entry) notFound();
 
+  const work = entry.metadata;
   return renderOgImage({
     title: work.name,
     eyebrow: `Case study · ${work.year} · ${work.role}`,
