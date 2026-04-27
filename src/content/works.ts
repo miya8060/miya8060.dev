@@ -1,11 +1,10 @@
 // TODO: replace these demo entries with real case studies before launch.
-// Source for the Home page Selected work table. The handoff README
-// suggests migrating this to content/works/*.mdx with frontmatter
-// (year/role/stack/featured) once the MDX content system lands.
-//
-// `href` currently points to the /works index for every row because the
-// per-slug case-study route does not exist yet. Switch to /works/${slug}
-// when those pages ship.
+// Source for the Home Selected work table and the /works/[slug] case study
+// pages. The handoff README suggests migrating this to content/works/*.mdx
+// with frontmatter (year/role/stack/featured/summary) once the MDX content
+// system lands. The case study page (src/app/works/[slug]/page.tsx) reads
+// `description` for both the metadata and the lead paragraph, so keep it
+// short and factual.
 
 export type SelectedWork = {
   slug: string;
@@ -13,7 +12,7 @@ export type SelectedWork = {
   name: string;
   role: string;
   stack: string;
-  href: string;
+  description: string;
 };
 
 export const SELECTED_WORKS: readonly SelectedWork[] = [
@@ -23,7 +22,8 @@ export const SELECTED_WORKS: readonly SelectedWork[] = [
     name: "Lattice — internal data console",
     role: "Frontend lead",
     stack: "TS · Next · Postgres",
-    href: "/works",
+    description:
+      "社内向けデータ運用コンソールのフロントエンドを刷新。Next.js + Postgres でロール別の権限と監査ログを統合。",
   },
   {
     slug: "gocrane",
@@ -31,7 +31,8 @@ export const SELECTED_WORKS: readonly SelectedWork[] = [
     name: "gocrane (OSS)",
     role: "Maintainer",
     stack: "Go · Kubernetes",
-    href: "/works",
+    description:
+      "Kubernetes 向けのリソース予約 / オートスケール OSS のメンテナンス。コア API と CRD の互換性維持を担当。",
   },
   {
     slug: "soba",
@@ -39,7 +40,8 @@ export const SELECTED_WORKS: readonly SelectedWork[] = [
     name: "Soba — habit journaling app",
     role: "Solo build",
     stack: "SwiftUI · CloudKit",
-    href: "/works",
+    description:
+      "習慣記録の iOS アプリを個人開発。SwiftUI と CloudKit でオフラインファーストの同期を実装。",
   },
   {
     slug: "studio-atelier",
@@ -47,14 +49,20 @@ export const SELECTED_WORKS: readonly SelectedWork[] = [
     name: "Brand site for Studio Atelier",
     role: "Design + build",
     stack: "Astro · GSAP",
-    href: "/works",
+    description:
+      "建築スタジオのブランドサイトをデザインから実装まで担当。Astro と GSAP でアニメーション中心の体験を構築。",
   },
   {
     slug: "kintsugi-cli",
     year: "2024",
     name: "kintsugi/cli",
-    role: "OSS · 1.2k★",
+    role: "OSS maintainer",
     stack: "Go",
-    href: "/works",
+    description:
+      "壊れた JSON / YAML を可能な限り自動修復する Go 製 CLI。GitHub で 1.2k スターを獲得。",
   },
 ] as const;
+
+export function findWorkBySlug(slug: string): SelectedWork | undefined {
+  return SELECTED_WORKS.find((work) => work.slug === slug);
+}
