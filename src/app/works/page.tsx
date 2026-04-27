@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Works",
   description: "ケーススタディ・OSS・サイドプロジェクト。",
-};
+  path: "/works",
+});
 
 export default function WorksPage() {
   return (
