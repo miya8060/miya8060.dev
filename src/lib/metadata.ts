@@ -9,21 +9,29 @@ export type PageMetadataInput = {
   description: string;
   path: string;
   ogTitle?: string;
+  ogImagePath?: string;
+  ogImageAlt?: string;
 };
 
-const OG_IMAGE = {
-  url: "/opengraph-image",
-  width: OG_SIZE.width,
-  height: OG_SIZE.height,
-  alt: OG_ALT,
-  type: "image/png",
-} as const;
+const DEFAULT_OG_IMAGE_PATH = "/opengraph-image";
+
+function buildOgImage(path: string, alt: string) {
+  return {
+    url: path,
+    width: OG_SIZE.width,
+    height: OG_SIZE.height,
+    alt,
+    type: "image/png",
+  } as const;
+}
 
 export function pageMetadata({
   title,
   description,
   path,
   ogTitle,
+  ogImagePath = DEFAULT_OG_IMAGE_PATH,
+  ogImageAlt = OG_ALT,
 }: PageMetadataInput): Metadata {
   const url = `${SITE_URL}${path}`;
   const resolvedOgTitle =
@@ -33,6 +41,7 @@ export function pageMetadata({
       : "absolute" in title
         ? title.absolute
         : SITE_NAME);
+  const ogImage = buildOgImage(ogImagePath, ogImageAlt);
 
   return {
     title,
@@ -45,13 +54,13 @@ export function pageMetadata({
       url,
       title: resolvedOgTitle,
       description,
-      images: [OG_IMAGE],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: resolvedOgTitle,
       description,
-      images: [OG_IMAGE],
+      images: [ogImage],
     },
   };
 }
