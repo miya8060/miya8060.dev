@@ -24,8 +24,7 @@ export default function WorksPage() {
             COMING SOON · 準備中
           </p>
           <p className="text-[14px] leading-[1.65] opacity-70">
-            Case studies, OSS contributions, and side projects will appear
-            here.
+            Case studies, OSS contributions, and side projects will appear here.
           </p>
         </div>
       </div>
