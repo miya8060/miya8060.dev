@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { BLOG_POSTS } from "@/content/blog";
 import { SELECTED_WORKS } from "@/content/works";
 import { SITE_URL } from "@/lib/site";
 
@@ -36,5 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...workEntries];
+  const blogEntries = BLOG_POSTS.map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified,
+    changeFrequency: "monthly" as ChangeFrequency,
+    priority: 0.5,
+  }));
+
+  return [...staticEntries, ...workEntries, ...blogEntries];
 }
