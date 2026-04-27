@@ -9,6 +9,7 @@
   --muted-foreground: #6b6962;
   --border: rgba(0, 0, 0, 0.08);
   --border-soft: rgba(0, 0, 0, 0.05);
+  --border-strong: rgba(0, 0, 0, 0.14);
   --surface: rgba(0, 0, 0, 0.02);
   --card: #ffffff;
   --capsule-bg: rgba(255, 255, 255, 0.6);
@@ -24,6 +25,7 @@
   --muted-foreground: #a0a0a3;
   --border: rgba(255, 255, 255, 0.08);
   --border-soft: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.14);
   --surface: rgba(255, 255, 255, 0.02);
   --card: #16161a;
   --capsule-bg: rgba(20, 20, 22, 0.5);
@@ -39,6 +41,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-border-soft: var(--border-soft);
+  --color-border-strong: var(--border-strong);
   --color-surface: var(--surface);
   --color-card: var(--card);
   --color-accent: var(--accent);
