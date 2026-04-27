@@ -40,113 +40,111 @@ export async function renderOgImage() {
     ]);
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "72px 80px",
+        background: "#0c0c0d",
+        color: "#f5f3ee",
+        fontFamily: "Space Grotesk",
+      }}
+    >
       <div
         style={{
-          width: "100%",
-          height: "100%",
           display: "flex",
-          flexDirection: "column",
+          alignItems: "center",
           justifyContent: "space-between",
-          padding: "72px 80px",
-          background: "#0c0c0d",
-          color: "#f5f3ee",
-          fontFamily: "Space Grotesk",
+          width: "100%",
         }}
       >
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
+            fontSize: 26,
+            letterSpacing: "-0.01em",
+            fontWeight: 700,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              fontSize: 26,
-              letterSpacing: "-0.01em",
-              fontWeight: 700,
-            }}
-          >
-            <span>miya8060</span>
-            <span style={{ color: "#9fe5b8" }}>.dev</span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "10px 18px",
-              border: "1px solid rgba(245,243,238,0.18)",
-              borderRadius: 999,
-              fontFamily: "JetBrains Mono",
-              fontSize: 14,
-              letterSpacing: "0.18em",
-              opacity: 0.85,
-            }}
-          >
-            <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: 999,
-                background: "#9fe5b8",
-                boxShadow: "0 0 12px #9fe5b8",
-              }}
-            />
-            <span>AVAILABLE FOR WORK</span>
-          </div>
+          <span>miya8060</span>
+          <span style={{ color: "#9fe5b8" }}>.dev</span>
         </div>
-
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            gap: 28,
-            maxWidth: 980,
+            alignItems: "center",
+            gap: 12,
+            padding: "10px 18px",
+            border: "1px solid rgba(245,243,238,0.18)",
+            borderRadius: 999,
+            fontFamily: "JetBrains Mono",
+            fontSize: 14,
+            letterSpacing: "0.18em",
+            opacity: 0.85,
           }}
         >
-          <div
+          <span
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "baseline",
-              fontSize: 96,
-              lineHeight: 1.05,
-              letterSpacing: "-0.035em",
-              fontWeight: 700,
+              width: 8,
+              height: 8,
+              borderRadius: 999,
+              background: "#9fe5b8",
+              boxShadow: "0 0 12px #9fe5b8",
             }}
-          >
-            <span>Hi, I&apos;m&nbsp;</span>
-            <span
-              style={{
-                fontFamily: "Instrument Serif",
-                fontStyle: "italic",
-                fontWeight: 400,
-                fontSize: 108,
-                color: "#9fe5b8",
-              }}
-            >
-              miya
-            </span>
-            <span>&nbsp;— Software Engineer.</span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "JetBrains Mono",
-              fontSize: 22,
-              letterSpacing: "0.18em",
-              opacity: 0.7,
-            }}
-          >
-            {taglineText.toUpperCase()}
-          </div>
+          />
+          <span>AVAILABLE FOR WORK</span>
         </div>
       </div>
-    ),
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 28,
+          maxWidth: 980,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "baseline",
+            fontSize: 96,
+            lineHeight: 1.05,
+            letterSpacing: "-0.035em",
+            fontWeight: 700,
+          }}
+        >
+          <span>Hi, I&apos;m&nbsp;</span>
+          <span
+            style={{
+              fontFamily: "Instrument Serif",
+              fontStyle: "italic",
+              fontWeight: 400,
+              fontSize: 108,
+              color: "#9fe5b8",
+            }}
+          >
+            miya
+          </span>
+          <span>&nbsp;— Software Engineer.</span>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "JetBrains Mono",
+            fontSize: 22,
+            letterSpacing: "0.18em",
+            opacity: 0.7,
+          }}
+        >
+          {taglineText.toUpperCase()}
+        </div>
+      </div>
+    </div>,
     {
       ...OG_SIZE,
       fonts: [
