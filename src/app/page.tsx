@@ -6,7 +6,7 @@ import { SELECTED_WORKS } from "@/content/works";
 export const metadata: Metadata = {
   title: { absolute: "miya8060.dev — Software Engineer Portfolio" },
   description:
-    "Independent software engineer. TypeScript、Go、とインフラでフルスタックに作る人。",
+    "スタートアップから自治体プロジェクトまで、システム開発を5年。最近はCloudとLLMで遊んでいます。",
 };
 
 export default function HomePage() {
@@ -19,9 +19,7 @@ export default function HomePage() {
               aria-hidden="true"
               className="bg-accent inline-block h-[7px] w-[7px] rounded-full shadow-[0_0_8px_var(--accent)]"
             />
-            <span className="font-mono tracking-[0.05em]">
-              AVAILABLE FOR WORK · 2026 Q3〜
-            </span>
+            <span className="tracking-[0.02em]">ご相談受付中</span>
           </div>
 
           <h1 className="mt-[26px] max-w-[600px] text-4xl leading-[1.12] font-medium tracking-[-0.03em] sm:text-5xl sm:leading-[1.08] lg:text-[56px]">
@@ -33,8 +31,7 @@ export default function HomePage() {
           </h1>
 
           <p className="mt-[22px] max-w-[480px] text-[14px] leading-[1.7] opacity-70">
-            スタートアップから自治体プロジェクトまで、ウェブとモバイルの開発を 8
-            年。最近は Edge と LLM 周辺で遊んでいます。
+            スタートアップから自治体プロジェクトまで、システム開発を5年。最近はCloudとLLMで遊んでいます。
           </p>
 
           <div className="mt-7 flex flex-wrap gap-2.5">
