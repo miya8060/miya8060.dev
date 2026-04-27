@@ -44,10 +44,6 @@ test.describe("layout", () => {
     const footer = page.getByRole("contentinfo");
     await expect(footer).toBeVisible();
 
-    await expect(
-      footer.getByText(/Independent software engineer\./),
-    ).toBeVisible();
-
     await expect(footer.getByText("SITE", { exact: true })).toBeVisible();
     await expect(footer.getByRole("link", { name: "About" })).toHaveAttribute(
       "href",

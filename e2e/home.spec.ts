@@ -14,7 +14,7 @@ test.describe("home", () => {
 
     const main = page.getByRole("main");
 
-    await expect(main.getByText(/AVAILABLE FOR WORK/)).toBeVisible();
+    await expect(main.getByText("ご相談受付中")).toBeVisible();
 
     const h1 = main.getByRole("heading", { level: 1 });
     await expect(h1).toBeVisible();
