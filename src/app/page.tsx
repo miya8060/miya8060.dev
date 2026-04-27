@@ -21,7 +21,9 @@ export default function HomePage() {
               aria-hidden="true"
               className="bg-accent inline-block h-[7px] w-[7px] rounded-full shadow-[0_0_8px_var(--accent)]"
             />
-            <span className="tracking-[0.02em]">ご相談受付中</span>
+            <span className="font-mono tracking-[0.05em]">
+              AVAILABLE FOR WORK · 2026 Q3〜
+            </span>
           </div>
 
           <h1 className="mt-[26px] max-w-[600px] text-4xl leading-[1.12] font-medium tracking-[-0.03em] sm:text-5xl sm:leading-[1.08] lg:text-[56px]">
