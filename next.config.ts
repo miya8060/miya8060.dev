@@ -6,7 +6,13 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX({
-  // remark / rehype plugins can be added here when needed.
+  options: {
+    // String-based plugin names so the config is serializable for Turbopack.
+    remarkPlugins: [
+      ["remark-frontmatter", "yaml"],
+      ["remark-mdx-frontmatter", { name: "metadata" }],
+    ],
+  },
 });
 
 export default withMDX(nextConfig);
