@@ -47,6 +47,9 @@
   --font-mono:
     var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, monospace;
+  --font-serif:
+    var(--font-instrument-serif), Georgia, "Hiragino Mincho ProN", "Yu Mincho",
+    serif;
 }
 
 html {
