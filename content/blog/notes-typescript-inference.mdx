@@ -1,0 +1,15 @@
+---
+slug: notes-typescript-inference
+title: "TypeScript の型推論で気づいたこと"
+date: "2026-04-15"
+tags: ["typescript", "next", "react"]
+summary: "Next.js 16 のサーバーコンポーネントで `params` が Promise になった件と、distributive conditional types の挙動をまとめた覚え書き。"
+---
+
+## メモ
+
+Next.js 16 のサーバーコンポーネントでは `params` が `Promise<{ slug: string }>` になり、ページ側で `await params` が必要になった。
+
+```ts
+const { slug } = await params;
+```

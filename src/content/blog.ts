@@ -1,5 +1,8 @@
 import type { MDXContent } from "mdx/types";
 import * as HelloMdx from "../../content/blog/hello-mdx.mdx";
+import * as NotesFrontendMisc from "../../content/blog/notes-frontend-misc.mdx";
+import * as NotesK8sScheduling from "../../content/blog/notes-k8s-scheduling.mdx";
+import * as NotesTypescriptInference from "../../content/blog/notes-typescript-inference.mdx";
 
 export type BlogFrontmatter = {
   slug: string;
@@ -18,6 +21,9 @@ type BlogModule = {
 // registry boundary to expose the `metadata` named export we author in each file.
 const BLOG_MODULES: readonly BlogModule[] = [
   HelloMdx,
+  NotesFrontendMisc,
+  NotesTypescriptInference,
+  NotesK8sScheduling,
 ] as unknown as readonly BlogModule[];
 
 export const BLOG_POSTS: readonly BlogFrontmatter[] = [...BLOG_MODULES]
