@@ -18,13 +18,13 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const work = findWorkBySlug(slug);
-  if (!work) return {};
+  const entry = findWorkBySlug(slug);
+  if (!entry) return {};
 
-  const path = `/works/${work.slug}`;
+  const path = `/works/${entry.metadata.slug}`;
   return pageMetadata({
-    title: work.name,
-    description: work.description,
+    title: entry.metadata.name,
+    description: entry.metadata.summary,
     path,
     ogImagePath: `${path}/opengraph-image`,
   });
@@ -36,9 +36,10 @@ export default async function WorkCaseStudyPage({
   params: Params;
 }) {
   const { slug } = await params;
-  const work = findWorkBySlug(slug);
-  if (!work) notFound();
+  const entry = findWorkBySlug(slug);
+  if (!entry) notFound();
 
+  const { metadata: work, Component: WorkBody } = entry;
   const stackItems = work.stack.split(" · ").filter(Boolean);
 
   return (
@@ -58,7 +59,7 @@ export default async function WorkCaseStudyPage({
           {work.name}
         </h1>
         <p className="mt-5 text-[15px] leading-[1.7] opacity-75">
-          {work.description}
+          {work.summary}
         </p>
       </header>
 
@@ -76,15 +77,8 @@ export default async function WorkCaseStudyPage({
         ))}
       </section>
 
-      <section className="mt-12 max-w-3xl sm:mt-16">
-        <div className="border-border flex min-h-[160px] flex-col items-start justify-center gap-2 rounded-2xl border border-dashed p-8">
-          <p className="font-mono text-[10px] tracking-[0.22em] opacity-50">
-            FULL CASE STUDY · 準備中
-          </p>
-          <p className="text-[14px] leading-[1.65] opacity-70">
-            背景・課題・アプローチ・成果は近日公開します。
-          </p>
-        </div>
+      <section aria-label="Case study" className="mt-12 max-w-3xl sm:mt-16">
+        <WorkBody />
       </section>
     </article>
   );
