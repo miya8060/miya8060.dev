@@ -36,7 +36,7 @@ export default function HomePage() {
       <p className="font-mono text-[11px] tracking-[0.22em] opacity-50">
         PORTFOLIO
       </p>
-      <h1 className="font-display mt-4 flex items-baseline text-5xl font-bold tracking-[-0.04em] sm:text-6xl">
+      <h1 className="font-display mt-4 text-5xl font-bold tracking-[-0.04em] sm:text-6xl">
         miya<span className="text-accent">8060</span>
       </h1>
       <p className="mt-5 max-w-prose text-[14px] leading-[1.75] opacity-75 sm:text-[15px]">
