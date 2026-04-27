@@ -20,7 +20,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="bg-background sticky top-0 z-40 flex flex-col items-stretch gap-3 px-5 pt-4 pb-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-10 sm:py-6 lg:px-14 lg:py-7">
+    <header className="bg-background border-border sticky top-0 z-40 flex flex-col items-stretch gap-3 border-b px-5 pt-4 pb-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-10 sm:py-6 lg:px-14 lg:py-7">
       <Link
         href="/"
         className="text-foreground inline-flex flex-col items-start"
