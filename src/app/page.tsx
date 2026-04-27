@@ -100,7 +100,7 @@ export default function HomePage() {
           {SELECTED_WORKS.map((work) => (
             <li key={work.slug}>
               <Link
-                href={work.href}
+                href={`/works/${work.slug}`}
                 className="border-border-soft hover:bg-foreground/[0.025] group grid grid-cols-[44px_1fr_24px] items-center gap-3 border-b py-4 text-[14px] transition-colors sm:grid-cols-[60px_1.4fr_1fr_1.2fr_24px] sm:gap-4"
               >
                 <span className="font-mono text-[12px] opacity-55">
