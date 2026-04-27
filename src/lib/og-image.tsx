@@ -10,24 +10,82 @@ export const OG_ALT = `${SITE_NAME} — ${SITE_TAGLINE}`;
 const HOME_HEADING_TEXT = "Hi, I'm miya — Software Engineer.";
 const HOME_TAGLINE_TEXT = "Freelance · Cloud · LLM · Tokyo";
 
+const OG_FONT_TIMEOUT_MS = 2500;
+const OG_FONT_RETRY_DELAY_MS = 250;
+
 export type RenderOgImageOptions = {
   title?: string;
   eyebrow?: string;
   tagline?: string;
 };
 
-async function loadGoogleFont(family: string, text: string) {
+type OgFont = {
+  name: string;
+  data: ArrayBuffer;
+  style: "normal" | "italic";
+  weight: 400 | 500 | 700;
+};
+
+async function fetchWithTimeout(url: string): Promise<Response> {
+  return fetch(url, { signal: AbortSignal.timeout(OG_FONT_TIMEOUT_MS) });
+}
+
+async function loadGoogleFontOnce(
+  family: string,
+  text: string,
+): Promise<ArrayBuffer> {
   const url = `https://fonts.googleapis.com/css2?family=${family}&text=${encodeURIComponent(
     text,
   )}`;
-  const css = await (await fetch(url)).text();
+  const cssResponse = await fetchWithTimeout(url);
+  if (!cssResponse.ok) {
+    throw new Error(`failed to load ${family} CSS (${cssResponse.status})`);
+  }
+  const css = await cssResponse.text();
   const resource = css.match(
     /src: url\((.+?)\) format\('(?:opentype|truetype|woff2?)'\)/,
   );
   if (!resource) throw new Error(`failed to parse ${family} CSS`);
-  const fontResponse = await fetch(resource[1]);
-  if (!fontResponse.ok) throw new Error(`failed to load ${family} ttf`);
+  const fontResponse = await fetchWithTimeout(resource[1]);
+  if (!fontResponse.ok) {
+    throw new Error(`failed to load ${family} ttf (${fontResponse.status})`);
+  }
   return fontResponse.arrayBuffer();
+}
+
+// Google Fonts への fetch は遅延・5xx・接続リセットが稀に起きる。
+// タイムアウト + 1 回リトライで吸収し、それでも駄目なら null を返して
+// ImageResponse のシステムフォント fallback に任せる (画像は必ず返す)。
+async function loadGoogleFont(
+  family: string,
+  text: string,
+): Promise<ArrayBuffer | null> {
+  try {
+    return await loadGoogleFontOnce(family, text);
+  } catch (firstError) {
+    await new Promise((resolve) => setTimeout(resolve, OG_FONT_RETRY_DELAY_MS));
+    try {
+      return await loadGoogleFontOnce(family, text);
+    } catch (secondError) {
+      console.warn(
+        `[og] gave up on ${family}: ${String(firstError)} / ${String(secondError)}`,
+      );
+      return null;
+    }
+  }
+}
+
+function buildFont(
+  name: string,
+  data: ArrayBuffer | null,
+  style: OgFont["style"],
+  weight: OgFont["weight"],
+): OgFont | null {
+  return data ? { name, data, style, weight } : null;
+}
+
+function compactFonts(candidates: (OgFont | null)[]): OgFont[] {
+  return candidates.filter((font): font is OgFont => font !== null);
 }
 
 export async function renderOgImage(options: RenderOgImageOptions = {}) {
@@ -55,20 +113,10 @@ export async function renderOgImage(options: RenderOgImageOptions = {}) {
       />,
       {
         ...OG_SIZE,
-        fonts: [
-          {
-            name: "Space Grotesk",
-            data: spaceGroteskBold,
-            style: "normal",
-            weight: 700,
-          },
-          {
-            name: "JetBrains Mono",
-            data: jetBrainsMono,
-            style: "normal",
-            weight: 500,
-          },
-        ],
+        fonts: compactFonts([
+          buildFont("Space Grotesk", spaceGroteskBold, "normal", 700),
+          buildFont("JetBrains Mono", jetBrainsMono, "normal", 500),
+        ]),
       },
     );
   }
@@ -88,26 +136,11 @@ export async function renderOgImage(options: RenderOgImageOptions = {}) {
 
   return new ImageResponse(<HomeOg tagline={taglineText} />, {
     ...OG_SIZE,
-    fonts: [
-      {
-        name: "Space Grotesk",
-        data: spaceGroteskBold,
-        style: "normal",
-        weight: 700,
-      },
-      {
-        name: "Instrument Serif",
-        data: instrumentSerifItalic,
-        style: "italic",
-        weight: 400,
-      },
-      {
-        name: "JetBrains Mono",
-        data: jetBrainsMono,
-        style: "normal",
-        weight: 500,
-      },
-    ],
+    fonts: compactFonts([
+      buildFont("Space Grotesk", spaceGroteskBold, "normal", 700),
+      buildFont("Instrument Serif", instrumentSerifItalic, "italic", 400),
+      buildFont("JetBrains Mono", jetBrainsMono, "normal", 500),
+    ]),
   });
 }
 
