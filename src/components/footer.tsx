@@ -28,12 +28,8 @@ export function Footer() {
     <footer className="border-border bg-surface text-foreground border-t px-5 pt-9 pb-6 sm:px-10 lg:px-14">
       <div className="grid grid-cols-1 gap-10 pb-[22px] sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
         <div>
-          <p className="font-display text-[26px] leading-none font-bold tracking-[-0.04em]">
+          <p className="font-sans text-[20px] leading-none font-medium tracking-[-0.02em]">
             miya<span className="text-accent">8060</span>
-          </p>
-          <p className="mt-3 max-w-[280px] text-[12px] leading-[1.55] opacity-60">
-            Independent software engineer.
-            TypeScript、Go、とインフラでフルスタックに作る人。
           </p>
         </div>
 
