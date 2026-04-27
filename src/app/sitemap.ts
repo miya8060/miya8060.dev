@@ -1,9 +1,13 @@
 import type { MetadataRoute } from "next";
+import { SELECTED_WORKS } from "@/content/works";
 import { SITE_URL } from "@/lib/site";
 
-const ROUTES: ReadonlyArray<{
+type SitemapEntry = MetadataRoute.Sitemap[number];
+type ChangeFrequency = SitemapEntry["changeFrequency"];
+
+const STATIC_ROUTES: ReadonlyArray<{
   path: string;
-  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
+  changeFrequency: ChangeFrequency;
   priority: number;
 }> = [
   { path: "/", changeFrequency: "monthly", priority: 1 },
@@ -15,10 +19,22 @@ const ROUTES: ReadonlyArray<{
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-  return ROUTES.map(({ path, changeFrequency, priority }) => ({
-    url: `${SITE_URL}${path}`,
+
+  const staticEntries = STATIC_ROUTES.map(
+    ({ path, changeFrequency, priority }) => ({
+      url: `${SITE_URL}${path}`,
+      lastModified,
+      changeFrequency,
+      priority,
+    }),
+  );
+
+  const workEntries = SELECTED_WORKS.map((work) => ({
+    url: `${SITE_URL}/works/${work.slug}`,
     lastModified,
-    changeFrequency,
-    priority,
+    changeFrequency: "monthly" as ChangeFrequency,
+    priority: 0.7,
   }));
+
+  return [...staticEntries, ...workEntries];
 }
