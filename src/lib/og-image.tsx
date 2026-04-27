@@ -7,8 +7,14 @@ export const OG_CONTENT_TYPE = "image/png";
 
 export const OG_ALT = `${SITE_NAME} — ${SITE_TAGLINE}`;
 
-const HEADING_TEXT = "Hi, I'm miya — Software Engineer.";
-const TAGLINE_TEXT = "Freelance · Cloud · LLM · Tokyo";
+const HOME_HEADING_TEXT = "Hi, I'm miya — Software Engineer.";
+const HOME_TAGLINE_TEXT = "Freelance · Cloud · LLM · Tokyo";
+
+export type RenderOgImageOptions = {
+  title?: string;
+  eyebrow?: string;
+  tagline?: string;
+};
 
 async function loadGoogleFont(family: string, text: string) {
   const url = `https://fonts.googleapis.com/css2?family=${family}&text=${encodeURIComponent(
@@ -24,10 +30,51 @@ async function loadGoogleFont(family: string, text: string) {
   return fontResponse.arrayBuffer();
 }
 
-export async function renderOgImage() {
-  const heroText = HEADING_TEXT;
+export async function renderOgImage(options: RenderOgImageOptions = {}) {
   const wordmarkText = SITE_NAME;
-  const taglineText = TAGLINE_TEXT;
+  const pillText = "AVAILABLE FOR WORK·";
+  const isCaseStudy = typeof options.title === "string";
+
+  if (isCaseStudy) {
+    const titleText = options.title!;
+    const eyebrowText = options.eyebrow ?? "";
+    const taglineText = options.tagline ?? HOME_TAGLINE_TEXT;
+    const groteskGlyphs = `${titleText}${wordmarkText}`;
+    const monoGlyphs = `${eyebrowText}${taglineText.toUpperCase()}${pillText}`;
+
+    const [spaceGroteskBold, jetBrainsMono] = await Promise.all([
+      loadGoogleFont("Space+Grotesk:wght@700", groteskGlyphs),
+      loadGoogleFont("JetBrains+Mono:wght@500", monoGlyphs),
+    ]);
+
+    return new ImageResponse(
+      <CaseStudyOg
+        title={titleText}
+        eyebrow={eyebrowText}
+        tagline={taglineText}
+      />,
+      {
+        ...OG_SIZE,
+        fonts: [
+          {
+            name: "Space Grotesk",
+            data: spaceGroteskBold,
+            style: "normal",
+            weight: 700,
+          },
+          {
+            name: "JetBrains Mono",
+            data: jetBrainsMono,
+            style: "normal",
+            weight: 500,
+          },
+        ],
+      },
+    );
+  }
+
+  const heroText = HOME_HEADING_TEXT;
+  const taglineText = HOME_TAGLINE_TEXT;
 
   const [spaceGroteskBold, instrumentSerifItalic, jetBrainsMono] =
     await Promise.all([
@@ -36,10 +83,36 @@ export async function renderOgImage() {
         `${heroText}${wordmarkText}${taglineText}`,
       ),
       loadGoogleFont("Instrument+Serif:ital@1", "miya"),
-      loadGoogleFont("JetBrains+Mono:wght@500", "AVAILABLE FOR WORK·"),
+      loadGoogleFont("JetBrains+Mono:wght@500", pillText),
     ]);
 
-  return new ImageResponse(
+  return new ImageResponse(<HomeOg tagline={taglineText} />, {
+    ...OG_SIZE,
+    fonts: [
+      {
+        name: "Space Grotesk",
+        data: spaceGroteskBold,
+        style: "normal",
+        weight: 700,
+      },
+      {
+        name: "Instrument Serif",
+        data: instrumentSerifItalic,
+        style: "italic",
+        weight: 400,
+      },
+      {
+        name: "JetBrains Mono",
+        data: jetBrainsMono,
+        style: "normal",
+        weight: 500,
+      },
+    ],
+  });
+}
+
+function OgFrame({ children }: { children: React.ReactNode }) {
+  return (
     <div
       style={{
         width: "100%",
@@ -53,52 +126,65 @@ export async function renderOgImage() {
         fontFamily: "Space Grotesk",
       }}
     >
+      {children}
+    </div>
+  );
+}
+
+function OgHeader() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          fontSize: 26,
+          letterSpacing: "-0.01em",
+          fontWeight: 700,
+        }}
+      >
+        <span>miya8060</span>
+        <span style={{ color: "#9fe5b8" }}>.dev</span>
+      </div>
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
+          gap: 12,
+          padding: "10px 18px",
+          border: "1px solid rgba(245,243,238,0.18)",
+          borderRadius: 999,
+          fontFamily: "JetBrains Mono",
+          fontSize: 14,
+          letterSpacing: "0.18em",
+          opacity: 0.85,
         }}
       >
-        <div
+        <span
           style={{
-            display: "flex",
-            fontSize: 26,
-            letterSpacing: "-0.01em",
-            fontWeight: 700,
-          }}
-        >
-          <span>miya8060</span>
-          <span style={{ color: "#9fe5b8" }}>.dev</span>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            padding: "10px 18px",
-            border: "1px solid rgba(245,243,238,0.18)",
+            width: 8,
+            height: 8,
             borderRadius: 999,
-            fontFamily: "JetBrains Mono",
-            fontSize: 14,
-            letterSpacing: "0.18em",
-            opacity: 0.85,
+            background: "#9fe5b8",
+            boxShadow: "0 0 12px #9fe5b8",
           }}
-        >
-          <span
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: 999,
-              background: "#9fe5b8",
-              boxShadow: "0 0 12px #9fe5b8",
-            }}
-          />
-          <span>AVAILABLE FOR WORK</span>
-        </div>
+        />
+        <span>AVAILABLE FOR WORK</span>
       </div>
+    </div>
+  );
+}
 
+function HomeOg({ tagline }: { tagline: string }) {
+  return (
+    <OgFrame>
+      <OgHeader />
       <div
         style={{
           display: "flex",
@@ -141,32 +227,70 @@ export async function renderOgImage() {
             opacity: 0.7,
           }}
         >
-          {taglineText.toUpperCase()}
+          {tagline.toUpperCase()}
         </div>
       </div>
-    </div>,
-    {
-      ...OG_SIZE,
-      fonts: [
-        {
-          name: "Space Grotesk",
-          data: spaceGroteskBold,
-          style: "normal",
-          weight: 700,
-        },
-        {
-          name: "Instrument Serif",
-          data: instrumentSerifItalic,
-          style: "italic",
-          weight: 400,
-        },
-        {
-          name: "JetBrains Mono",
-          data: jetBrainsMono,
-          style: "normal",
-          weight: 500,
-        },
-      ],
-    },
+    </OgFrame>
+  );
+}
+
+function CaseStudyOg({
+  title,
+  eyebrow,
+  tagline,
+}: {
+  title: string;
+  eyebrow: string;
+  tagline: string;
+}) {
+  return (
+    <OgFrame>
+      <OgHeader />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 32,
+          maxWidth: 1040,
+        }}
+      >
+        {eyebrow ? (
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "JetBrains Mono",
+              fontSize: 20,
+              letterSpacing: "0.22em",
+              color: "#9fe5b8",
+              opacity: 0.95,
+            }}
+          >
+            {eyebrow.toUpperCase()}
+          </div>
+        ) : null}
+        <div
+          style={{
+            display: "flex",
+            fontSize: 76,
+            lineHeight: 1.08,
+            letterSpacing: "-0.03em",
+            fontWeight: 700,
+          }}
+        >
+          {title}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "JetBrains Mono",
+            fontSize: 20,
+            letterSpacing: "0.18em",
+            opacity: 0.7,
+          }}
+        >
+          {tagline.toUpperCase()}
+        </div>
+      </div>
+    </OgFrame>
   );
 }
