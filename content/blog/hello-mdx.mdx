@@ -1,0 +1,21 @@
+---
+slug: hello-mdx
+title: "Hello, MDX"
+date: "2026-04-27"
+tags: ["meta", "mdx"]
+summary: "このブログは MDX で動いています。投稿は content/blog 以下に YAML frontmatter と本文を書くだけで追加できます。"
+---
+
+このブログは [MDX](https://mdxjs.com/) で動いています。投稿は `content/blog/<slug>.mdx` に YAML frontmatter と本文を書くだけで追加できます。
+
+## なぜ MDX
+
+- frontmatter を静的に解析できる
+- typography をコンポーネント側で一元管理できる
+- 必要になればインライン JSX も書ける
+
+## 仕組み
+
+- `remark-frontmatter` と `remark-mdx-frontmatter` で YAML を `metadata` named export に変換
+- `src/content/blog.ts` の registry が `content/blog/*.mdx` を static import で束ねる
+- `/blog` 一覧と `/blog/[slug]` 個別ページが同じ frontmatter shape を共有
